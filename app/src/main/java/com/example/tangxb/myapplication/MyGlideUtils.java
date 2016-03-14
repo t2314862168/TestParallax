@@ -18,14 +18,23 @@ public class MyGlideUtils {
         MyGlideUtils.mNeedItemH = needItemH;
     }
 
-    public static void loadImgByUrl(Context context, String url, ImageView imageView) {
+    public static void loadImgByUrlOverride(Context context, String url, ImageView imageView) {
         Glide.with(context)
                 .load(url)
                 .centerCrop()
-                // this is very import , because the ParallaxImageView need actually height should > it's measured height
-                // so we should provide this height to download
+                        // this is very import , because the ParallaxImageView need actually height should > it's measured height
+                        // so we should provide this height to download
                 .override(mContainerW, mNeedItemH)
-                // use disk cache
+                        // use disk cache
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.mipmap.ic_launcher)
+                .into(imageView);
+    }
+
+    public static void loadImgByUrlCommon(Context context, String url, ImageView imageView) {
+        Glide.with(context)
+                .load(url)
+                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.mipmap.ic_launcher)
                 .into(imageView);
