@@ -4,4 +4,4 @@ TestParallax
 上下我的效果图吧
 
 
-新增GridLayoutManger,以及瀑布流的LayoutManger,具体运行代码之后可见
+新增GridLayoutManger,以及瀑布流的LayoutManger,具体运行代码之后可见(虽然很丑陋)
