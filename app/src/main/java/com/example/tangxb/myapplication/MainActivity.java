@@ -3,8 +3,11 @@ package com.example.tangxb.myapplication;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -53,6 +56,54 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    public void doWallWork() {
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        // if you use StaggeredGridLayoutManager.VERTICAL , you can set item height but set item width not working
+        // if you use StaggeredGridLayoutManager.HORIZONTAL , you can set item width but set item height not working
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        MyCommonAdapter adapter = new MyCommonAdapter(this);
+        recyclerView.setAdapter(adapter);
+        adapter.addEntity(DataProvider.getDataList());
+    }
+
+    public void doGridLayoutWork() {
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        final GridLayoutManager layoutManager = new GridLayoutManager(recyclerView.getContext(), 3);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                int spanSize = 1;
+                if (position == 0) {
+                    spanSize = 2;
+                } else if (position == 5) {
+                    spanSize = layoutManager.getSpanCount();
+                }
+                return spanSize;
+            }
+        });
+        recyclerView.setLayoutManager(layoutManager);
+        MyCommonAdapter adapter = new MyCommonAdapter(this);
+        recyclerView.setAdapter(adapter);
+        adapter.addEntity(DataProvider.getDataList());
+    }
+
+    public void testWallWork(int index) {
+        switch (index) {
+            case 0:
+                doParallaxWork();
+                break;
+            case 1:
+                doWallWork();
+                break;
+            case 2:
+                doGridLayoutWork();
+                break;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +111,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        doParallaxWork();
+        testWallWork(1);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
